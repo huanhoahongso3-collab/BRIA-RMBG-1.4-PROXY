@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRIA RMBG 1.4 – ZSticker API Proxy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* M3 Light Palette */
+            --md-sys-color-primary: #0061a4;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #d1e4ff;
+            --md-sys-color-on-primary-container: #001d36;
+            --md-sys-color-surface: #fdfcff;
+            --md-sys-color-on-surface: #1a1c1e;
+            --md-sys-color-surface-container: #f3f4f9;
+            --md-sys-color-secondary-container: #d3e4ff;
+            --md-sys-color-on-secondary-container: #001d36;
+            --md-sys-color-outline: #73777f;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* M3 Dark Palette */
+                --md-sys-color-primary: #9ecaff;
+                --md-sys-color-on-primary: #003258;
+                --md-sys-color-primary-container: #00497d;
+                --md-sys-color-on-primary-container: #d1e4ff;
+                --md-sys-color-surface: #1a1c1e;
+                --md-sys-color-on-surface: #e2e2e6;
+                --md-sys-color-surface-container: #2f3033;
+                --md-sys-color-secondary-container: #3e4759;
+                --md-sys-color-on-secondary-container: #dce2f9;
+                --md-sys-color-outline: #8d9199;
+            }
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 500;
+            margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .warning-card {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .warning-card h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card {
+            background-color: var(--md-sys-color-surface-container);
+            border-radius: 28px;
+            padding: 32px;
+            margin-bottom: 16px;
+        }
+
+        .code-container {
+            position: relative;
+            background-color: #1a1c1e;
+            border-radius: 16px;
+            margin: 20px 0;
+        }
+
+        code {
+            display: block;
+            color: #e2e2e6;
+            padding: 24px;
+            font-family: 'monospace';
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 100px;
+            cursor: pointer;
+            font-family: 'Space Grotesk';
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .copy-btn:active { transform: scale(0.95); }
+
+        .btn-tonal {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 500;
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            margin-top: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-tonal:hover { opacity: 0.85; }
+
+        a { color: var(--md-sys-color-primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>BRIA RMBG 1.4 – Background Removal</h1>
+
+        <div class="warning-card">
+            <h2><span>⚠️</span> Important Notice</h2>
+            <p>This specialized proxy is purpose-built for the <strong>ZSticker</strong> app, a non-commercial open-source project that helps users create and share custom stickers to <strong>Zalo for Android</strong>.</p>
+            <p>You can view the source code and contribute here: <br>
+               <a href="https://github.com/huanhoahongso3-collab/ZSticker/" target="_blank" style="font-weight: 600; text-decoration: underline;">github.com/huanhoahongso3-collab/ZSticker</a>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-top:0">API Implementation</h3>
+            <p>Use the following cURL command to process images through the ZSticker proxy. This ensures the least wrong code for stable Android integration.</p>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode()">Copy</button>
+                <code id="curl-cmd"></code>
+            </div>
+
+            <p><strong>Stable Version:</strong> Utilizing the 1.4 engine to maintain consistent results for sticker foreground extraction across various Android device types.</p>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-top:0">External Resources</h3>
+            <p>This service acts as a bridge to the original BRIA RMBG model.</p>
+            <a href="https://huggingface.co/spaces/briaai/BRIA-RMBG-1.4" target="_blank" class="btn-tonal">
+                Original Model on Hugging Face
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const endpoint = window.location.origin + "/api/rmbg";
+        const cmd = `curl -X POST \\
+  -H "Content-Type: application/octet-stream" \\
+  --data-binary @input.png \\
+  ${endpoint} \\
+  --output output.png`;
+
+        document.getElementById("curl-cmd").innerText = cmd;
+
+        function copyCode() {
+            navigator.clipboard.writeText(cmd);
+            const btn = document.querySelector('.copy-btn');
+            btn.innerText = 'Copied!';
+            setTimeout(() => btn.innerText = 'Copy', 2000);
+        }
+    </script>
+
+</body>
+</html>

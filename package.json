@@ -1,0 +1,19 @@
+{
+  "name": "vercel-rmbg-proxy",
+  "version": "1.4.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@gradio/client": "^1.3.0",
+    "undici": "^6.19.7",
+    "busboy": "^1.6.0"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}
+
+
