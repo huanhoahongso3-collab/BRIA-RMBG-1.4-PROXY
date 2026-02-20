@@ -1,63 +1,70 @@
 import { Client } from "@gradio/client";
-import { Transform } from "stream";
-
-// Helper: Throttles a stream to a specific bytes-per-second
-class Throttle extends Transform {
-  constructor(bps) {
-    super();
-    this.bps = bps;
-  }
-
-  _transform(chunk, encoding, callback) {
-    // Calculate delay in ms based on chunk size
-    const delay = (chunk.length / this.bps) * 1000;
-    setTimeout(() => {
-      this.push(chunk);
-      callback();
-    }, delay);
-  }
-}
+import { Readable } from "stream";
 
 export const config = {
-  api: { bodyParser: false }
+  api: {
+    bodyParser: false
+  }
 };
 
 export default async function handler(req, res) {
-  const SPEED_LIMIT = 50 * 1024; // 50 KB/s
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   try {
-    // --- 1. Throttled Input ---
-    const inputThrottle = new Throttle(SPEED_LIMIT);
-    req.pipe(inputThrottle);
-
+    // 1. Collect the incoming stream
     const chunks = [];
-    for await (const chunk of inputThrottle) {
+    for await (const chunk of req) {
       chunks.push(chunk);
     }
     const buffer = Buffer.concat(chunks);
     const blob = new Blob([buffer], { type: "image/png" });
 
-    // --- 2. Process with Gradio ---
+    // 2. Connect and Predict
     const client = await Client.connect("briaai/BRIA-RMBG-2.0");
     const result = await client.predict("/image", { image: blob });
-    
+
+    // 3. Fetch the result image
     const file = result.data[1];
     const imgResponse = await fetch(file.url);
     const imgArrayBuffer = await imgResponse.arrayBuffer();
     const finalBuffer = Buffer.from(imgArrayBuffer);
 
-    // --- 3. Throttled Output ---
+    // --- 4. Throttling Logic (50 KB/s) ---
+    const SPEED_BPS = 50 * 1024; // 50 KB in bytes
+    const CHUNK_SIZE = 16384;    // 16 KB chunks for smoother delivery
+    let offset = 0;
+
     res.setHeader("Content-Type", "image/png");
     res.setHeader("Content-Length", finalBuffer.length);
 
-    const outputThrottle = new Throttle(SPEED_LIMIT);
-    outputThrottle.pipe(res);
+    const throttleStream = new Readable({
+      read() {
+        if (offset >= finalBuffer.length) {
+          this.push(null); // End of stream
+          return;
+        }
 
-    // Write the buffer to the throttle stream
-    outputThrottle.write(finalBuffer);
-    outputThrottle.end();
+        const end = Math.min(offset + CHUNK_SIZE, finalBuffer.length);
+        const chunk = finalBuffer.slice(offset, end);
+        offset = end;
+
+        // Calculate delay: (bytes / bytes_per_second) * 1000ms
+        const delay = (chunk.length / SPEED_BPS) * 1000;
+
+        setTimeout(() => {
+          this.push(chunk);
+        }, delay);
+      }
+    });
+
+    throttleStream.pipe(res);
 
   } catch (e) {
-    res.status(500).json({ error: e.toString() });
+    console.error(e);
+    if (!res.headersSent) {
+      res.status(500).json({ error: e.toString() });
+    }
   }
 }
