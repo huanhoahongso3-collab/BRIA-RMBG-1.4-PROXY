@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+    <link rel="icon" href="https://dhp2010.is-a.dev/easter/ic_launcher_foreground.png" type="image/png">
     <style>
         :root {
             /* M3 Light Palette */
@@ -119,6 +119,13 @@
 
         .copy-btn:active { transform: scale(0.95); }
 
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
         .btn-tonal {
             display: inline-flex;
             align-items: center;
@@ -128,7 +135,6 @@
             font-weight: 500;
             background-color: var(--md-sys-color-secondary-container);
             color: var(--md-sys-color-on-secondary-container);
-            margin-top: 8px;
             transition: opacity 0.2s;
         }
 
@@ -146,14 +152,14 @@
         <div class="warning-card">
             <h2><span>⚠️</span> Important Notice</h2>
             <p>This specialized proxy is purpose-built for the <strong>ZSticker</strong> app, a non-commercial open-source project that helps users create and share custom stickers to <strong>Zalo for Android</strong>.</p>
-            <p>You can view the source code and contribute here: <br>
+            <p>Project home: <br>
                <a href="https://github.com/huanhoahongso3-collab/ZSticker/" target="_blank" style="font-weight: 600; text-decoration: underline;">github.com/huanhoahongso3-collab/ZSticker</a>
             </p>
         </div>
 
         <div class="card">
             <h3 style="margin-top:0">API Implementation</h3>
-            <p>Use the following cURL command to process images through the ZSticker proxy. This ensures the least wrong code for stable Android integration.</p>
+            <p>Use the following cURL command to process images through the ZSticker proxy. This ensures stable Android integration.</p>
 
             <div class="code-container">
                 <button class="copy-btn" onclick="copyCode()">Copy</button>
@@ -164,11 +170,17 @@
         </div>
 
         <div class="card">
-            <h3 style="margin-top:0">External Resources</h3>
-            <p>This service acts as a bridge to the original BRIA RMBG model.</p>
-            <a href="https://huggingface.co/spaces/briaai/BRIA-RMBG-1.4" target="_blank" class="btn-tonal">
-                Original Model on Hugging Face
-            </a>
+            <h3 style="margin-top:0">Developer Resources</h3>
+            <p>Explore the underlying logic of the proxy or visit the original AI model that powers this service.</p>
+
+            <div class="btn-group">
+                <a href="https://github.com/huanhoahongso3-collab/BRIA-RMBG-1.4-PROXY" target="_blank" class="btn-tonal">
+                    Proxy Source Code
+                </a>
+                <a href="https://huggingface.co/spaces/briaai/BRIA-RMBG-1.4" target="_blank" class="btn-tonal">
+                    Original BRIA Model
+                </a>
+            </div>
         </div>
     </div>
 
@@ -183,7 +195,8 @@
         document.getElementById("curl-cmd").innerText = cmd;
 
         function copyCode() {
-            navigator.clipboard.writeText(cmd);
+            const codeText = document.getElementById("curl-cmd").innerText;
+            navigator.clipboard.writeText(codeText);
             const btn = document.querySelector('.copy-btn');
             btn.innerText = 'Copied!';
             setTimeout(() => btn.innerText = 'Copy', 2000);
